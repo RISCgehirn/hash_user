@@ -1,7 +1,7 @@
+#!/usr/bin/python3
 #written by oostkust@protonmail.com
 #
 
-from __future__ import print_function
 from string import printable
 from itertools import product
 import crypt
@@ -10,28 +10,26 @@ import sys
 found = False
 count = 0
 
-salt = raw_input("Enter string up to(not including the third '$'  like so:($.$.........):")
-
-user_hash = raw_input("Enter the remaining random string(your hashed password):")
+hash_field = input("Copy and paste the encrypted password field from your /etc/shadow file")
+split_field = hash_field.split("$")
+salt_field = "$" + split_field[1] + "$" + split_field[2]
 
 for length in range(10, 16):
-    password_to_attempt = product(printable, repeat=length)
+	password_to_attempt = product(printable, repeat=length)
 
-    for attempt in password_to_attempt:
-        
-        attempt = ''.join(attempt)
-        hash_user = crypt.crypt(attempt, salt)
-        salted_hash = (salt + "$" + user_hash)
-        if salted_hash == hash_user:
-            print("Your password is: " + attempt)
-            break
-        
-        
-        count += 1
-        
-        sys.stdout.write("Attempt: %d   \r" % (count))
-        sys.stdout.flush()
-        
+	for attempt in password_to_attempt:
 
-    if salted_hash == hash_user:
-        break
+		attempt = ''.join(attempt)
+		hash_user = crypt.crypt(attempt, salt_field)
+
+		if hash_field == hash_user:
+			print("\nYour password is: " + attempt)
+			break
+
+		count += 1
+		sys.stdout.write("Attempt: %d   \r" % (count))
+		sys.stdout.flush()
+
+	if hash_field == hash_user:
+		break
+
