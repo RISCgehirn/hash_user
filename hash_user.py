@@ -1,3 +1,6 @@
+#written by oostkust@protonmail.com
+#
+
 from __future__ import print_function
 from string import printable
 from itertools import product
